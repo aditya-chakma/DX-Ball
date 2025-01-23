@@ -1,23 +1,23 @@
 #include "iGraphics.h"
-#include<stdio.h>
-#include<conio.h>
+#include <stdio.h>
+#include <conio.h>
 
-#define xaxis 1000  //xaxis and yaxis are the pixels of the screen
+#define xaxis 1000 // xaxis and yaxis are the pixels of the screen
 #define yaxis 680
-#define Row 20      //Row and Col is the structure array size
+#define Row 20 // Row and Col is the structure array size
 #define Col 20
-#define rw 5        //row and cl are brick numbers
+#define rw 5 // row and cl are brick numbers
 #define cl 10
-#define white 255,255,255 //colors
-#define black 0,0,0
-#define gray 128,128,128
-#define Red 255,0,0
+#define white 255, 255, 255 // colors
+#define black 0, 0, 0
+#define gray 128, 128, 128
+#define Red 255, 0, 0
 
 // bool score is a boolean variable for initializing Current Score at the starting of a level
 
-bool score=true;
+bool score = true;
 
-//function prototypes
+// function prototypes
 void showball();
 /* showball() function shows the ball int hte game window */
 void showbar();
@@ -48,103 +48,105 @@ dx,dy are movement speed of the ball
 r is the radius of the ball
 */
 
-int ball_x, ball_y,dx=5,dy=7,r=10;  //Co-ordinate and radius of the ball
+int ball_x, ball_y, dx = 5, dy = 7, r = 10; // Co-ordinate and radius of the ball
 
 /*
 bar_x,bar_y are the co-ordinates of the bar
 bar_l,bar_h are length and heigth of the bar
 */
-int bar_x,bar_y=26,bar_l=80,bar_h=8; //Ball-change
-int i,j,x,y,l,flag=0,mask=0; //Initializing variables
-int CurrentScore, HighScore;    //variables for showing scores
+int bar_x, bar_y = 26, bar_l = 80, bar_h = 8; // Ball-change
+int i, j, x, y, l, flag = 0, mask = 0;        // Initializing variables
+int CurrentScore, HighScore;                  // variables for showing scores
 double texty;
 
 char str[5];
-//variables
-//int level=1;
+// variables
+// int level=1;
 
 // variables for bricks
-struct box{
-    int value=1;
-    int brick_x,brick_y; //Co-ordinates of the bricks
-}brick[Row][Col];
-//length an heigth of the bricks
-int length=40,height=20;
+struct box
+{
+    int value = 1;
+    int brick_x, brick_y; // Co-ordinates of the bricks
+} brick[Row][Col];
+// length an heigth of the bricks
+int length = 40, height = 20;
 
 void iDraw()
 {
     iClear();
 
-    //This will show The game menu
+    // This will show The game menu
 
-    if(flag==0)
+    if (flag == 0)
     {
         iMenu();
     }
 
-    //Codes for level one
+    // Codes for level one
 
-    if(flag==1){
+    if (flag == 1)
+    {
 
-    /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
-    when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
-    is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
+        /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
+        when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
+        is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
 
-        if(score){
-            CurrentScore=0;
-            score=false;
+        if (score)
+        {
+            CurrentScore = 0;
+            score = false;
         }
 
-        //variable for counting number of bricks
+        // variable for counting number of bricks
 
-        int counter =0;
-        y=yaxis-height;
+        int counter = 0;
+        y = yaxis - height;
 
-        //color codes
+        // color codes
 
-        int Rbrick=0,Gbrick=20,Bbrick=89;
+        int Rbrick = 0, Gbrick = 20, Bbrick = 89;
 
-        //for showing brick on level 1
+        // for showing brick on level 1
 
-        for(i=0;i<rw;i++)    //Showing row
+        for (i = 0; i < rw; i++) // Showing row
         {
-            x=300;
-            for(j=0;j<cl;j++)   //Showing column
+            x = 300;
+            for (j = 0; j < cl; j++) // Showing column
             {
-                iSetColor(Rbrick+=5,Gbrick+=2,Bbrick+=3);
-                if(brick[i][j].value)
+                iSetColor(Rbrick += 5, Gbrick += 2, Bbrick += 3);
+                if (brick[i][j].value)
                 {
-                    iFilledRectangle(x,y,length,height);
-                    brick[i][j].brick_x=x;
-                    brick[i][j].brick_y=y;
+                    iFilledRectangle(x, y, length, height);
+                    brick[i][j].brick_x = x;
+                    brick[i][j].brick_y = y;
                 }
-                x=x+length;
+                x = x + length;
                 iSetColor(black);
-                iLine(x,y+height,x,y);
-                //Changing position of the brick, in x axis
+                iLine(x, y + height, x, y);
+                // Changing position of the brick, in x axis
             }
             iSetColor(black);
-            iLine(0,y,xaxis,y);
-            y=y-height;     //Changing position of the brick in y axis
+            iLine(0, y, xaxis, y);
+            y = y - height; // Changing position of the brick in y axis
         }
 
         // Showing ball and bar if the game is over, the ball and bar won't be seen
 
-         if(ball_y-r> bar_y)
-         {
+        if (ball_y - r > bar_y)
+        {
             showball();
             showbar();
-         }
-
+        }
 
         // Ending the GAME
-        if(ball_y < bar_y)
+        if (ball_y < bar_y)
         {
-            //mask variable for pausing the game
-            mask=1;
+            // mask variable for pausing the game
+            mask = 1;
             iPauseTimer(0);
             iSetColor(white);
-            iText(xaxis/2-100, yaxis/2, "Game Over.... Press END",GLUT_BITMAP_TIMES_ROMAN_24);
+            iText(xaxis / 2 - 100, yaxis / 2, "Game Over.... Press END", GLUT_BITMAP_TIMES_ROMAN_24);
         }
         else
         {
@@ -153,502 +155,496 @@ void iDraw()
             ShowScore();
         }
 
-        //Counts, How many brick exist
+        // Counts, How many brick exist
 
-        for(i=0;i<5;i++)
+        for (i = 0; i < 5; i++)
         {
-            for(j=0;j<10;j++)
+            for (j = 0; j < 10; j++)
             {
-                if(brick[i][j].value)
+                if (brick[i][j].value)
                     counter++;
             }
         }
 
-        //control function changes the level ind initializes brick values to 1
+        // control function changes the level ind initializes brick values to 1
 
-        control(counter,flag);
-
+        control(counter, flag);
     }
 
-    //flag 2 for level two
+    // flag 2 for level two
 
-    if(flag==2)
+    if (flag == 2)
     {
 
-    /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
-    when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
-    is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
+        /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
+        when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
+        is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
 
-        if(score){
-            CurrentScore=0;
-            score=false;
+        if (score)
+        {
+            CurrentScore = 0;
+            score = false;
         }
         // counter for counting existing bricks
 
-        int counter=0;
+        int counter = 0;
 
         {
-            int gap=80;
-            y=yaxis-130;
-            int Rbrick=120,Gbrick=140,Bbrick=100;
+            int gap = 80;
+            y = yaxis - 130;
+            int Rbrick = 120, Gbrick = 140, Bbrick = 100;
 
-          //For showing bricks
-          for(i=0;i<rw;i++)
+            // For showing bricks
+            for (i = 0; i < rw; i++)
             {
-              x=300;
-              for(j=0;j<cl;j++)
-              {
-                     if(brick[i][j].value)
-                        {
-                            iSetColor(Rbrick,Gbrick,Bbrick);
-                            iFilledRectangle(x,y,length,height);
-                            brick[i][j].brick_x=x;
-                            brick[i][j].brick_y=y;
-
-
-                        }
-                        x=x+length;    //Changing position of the brick, in x axis
-                        x=x+l;
-                        iSetColor(black);
-                        iLine(x,y+height,x,y); // For drawing wall
+                x = 300;
+                for (j = 0; j < cl; j++)
+                {
+                    if (brick[i][j].value)
+                    {
+                        iSetColor(Rbrick, Gbrick, Bbrick);
+                        iFilledRectangle(x, y, length, height);
+                        brick[i][j].brick_x = x;
+                        brick[i][j].brick_y = y;
+                    }
+                    x = x + length; // Changing position of the brick, in x axis
+                    x = x + l;
+                    iSetColor(black);
+                    iLine(x, y + height, x, y); // For drawing wall
                 }
                 iSetColor(black);
-                iLine(0,y,xaxis,y);
-                y=y-gap;    //Changing position of the brick, in y axis
+                iLine(0, y, xaxis, y);
+                y = y - gap; // Changing position of the brick, in y axis
             }
 
-        if(ball_y-r>bar_y)
-         {
-            showball();
-            showbar();
-         }
-
-        // Ending the GAME
-        if(ball_y< bar_y)
-        {
-            mask=1;
-            iPauseTimer(0);
-            iSetColor(255, 255, 255);
-            iText(xaxis/2-100, yaxis/2, "Game Over.... Press END",GLUT_BITMAP_TIMES_ROMAN_24);
-        }
-        else
-        {
-            iSetColor(255, 255, 255);
-            iText(10, 10, "Press p for pause, r for resume, END for exit.");
-
-            //For showing score
-
-            ShowScore();
-        }
-
-        //for counting bricks
-        for(i=10;i<12;i++)
-        {
-            for(j=0;j<20;j++)
+            if (ball_y - r > bar_y)
             {
-                if(brick[i][j].value)
-                    counter++;
+                showball();
+                showbar();
             }
+
+            // Ending the GAME
+            if (ball_y < bar_y)
+            {
+                mask = 1;
+                iPauseTimer(0);
+                iSetColor(255, 255, 255);
+                iText(xaxis / 2 - 100, yaxis / 2, "Game Over.... Press END", GLUT_BITMAP_TIMES_ROMAN_24);
+            }
+            else
+            {
+                iSetColor(255, 255, 255);
+                iText(10, 10, "Press p for pause, r for resume, END for exit.");
+
+                // For showing score
+
+                ShowScore();
+            }
+
+            // for counting bricks
+            for (i = 10; i < 12; i++)
+            {
+                for (j = 0; j < 20; j++)
+                {
+                    if (brick[i][j].value)
+                        counter++;
+                }
+            }
+            control(counter, flag);
         }
-        control(counter,flag);
     }
 
-    }
+    // Level 3
 
-    //Level 3
-
-    if(flag==3)
+    if (flag == 3)
     {
 
-    /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
-    when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
-    is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
+        /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
+        when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
+        is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
 
-        if(score){
-            CurrentScore=0;
-            score=false;
+        if (score)
+        {
+            CurrentScore = 0;
+            score = false;
         }
-        //Counter for counting the existing bricks
-        int counter=0;
-        int Rbrick=255,Gbrick=0,Bbrick=0;
+        // Counter for counting the existing bricks
+        int counter = 0;
+        int Rbrick = 255, Gbrick = 0, Bbrick = 0;
 
-        y=yaxis-100;
+        y = yaxis - 100;
 
+        // Loop for showing brick
 
-        //Loop for showing brick
-
-        for(i=0;i<5;i++)
+        for (i = 0; i < 5; i++)
         {
 
-            int x=120;
-            for(j=0;j<10;j++)
+            int x = 120;
+            for (j = 0; j < 10; j++)
             {
-                iSetColor(Rbrick,Bbrick,Gbrick);
-                if(brick[i][j].value)
+                iSetColor(Rbrick, Bbrick, Gbrick);
+                if (brick[i][j].value)
                 {
-                    iFilledRectangle(x,y,length,height);
-                    brick[i][j].brick_x=x;
-                    brick[i][j].brick_y=y;
-
+                    iFilledRectangle(x, y, length, height);
+                    brick[i][j].brick_x = x;
+                    brick[i][j].brick_y = y;
                 }
-              x=x+(2*length);
+                x = x + (2 * length);
             }
-            y=y-55;
+            y = y - 55;
 
-            //If-only conditions for changing color of the bricks after  two rows
-            if(i==1)
+            // If-only conditions for changing color of the bricks after  two rows
+            if (i == 1)
             {
-                Rbrick=0;
-                Bbrick=255;
-                Gbrick=0;
+                Rbrick = 0;
+                Bbrick = 255;
+                Gbrick = 0;
             }
-            if(i==3)
+            if (i == 3)
             {
-                Rbrick=0;
-                Bbrick=0;
-                Gbrick=255;
+                Rbrick = 0;
+                Bbrick = 0;
+                Gbrick = 255;
             }
         }
 
-
-        //For showing ball and bar
-        if(ball_y-r>bar_y)
-         {
+        // For showing ball and bar
+        if (ball_y - r > bar_y)
+        {
             showball();
             showbar();
-         }
+        }
 
-        //Ending game conditions
+        // Ending game conditions
 
-        if(ball_y < bar_y)
+        if (ball_y < bar_y)
         {
-            mask=1;
+            mask = 1;
             iPauseTimer(0);
             iSetColor(255, 255, 255);
-            iText(xaxis/2-100, yaxis/2, "Game Over.... Press END",GLUT_BITMAP_TIMES_ROMAN_24);
+            iText(xaxis / 2 - 100, yaxis / 2, "Game Over.... Press END", GLUT_BITMAP_TIMES_ROMAN_24);
         }
         else
         {
             iSetColor(255, 255, 255);
             iText(10, 10, "Press p for pause, r for resume, END for exit.");
             ShowScore();
-
         }
 
-        //for counting bricks
-        for(i=10;i<12;i++)
+        // for counting bricks
+        for (i = 10; i < 12; i++)
         {
-            for(j=0;j<20;j++)
+            for (j = 0; j < 20; j++)
             {
-                if(brick[i][j].value)
+                if (brick[i][j].value)
                     counter++;
             }
         }
 
-        //Changing level
-        control(counter,flag);
-
+        // Changing level
+        control(counter, flag);
     }
 
-    //level 4
+    // level 4
 
-    if(flag==4)
+    if (flag == 4)
     {
-    /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
-    when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
-    is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
+        /*This initializes CurrentScore to zero at staring of level one. The initializer "score" is set true at first of the game.
+        when it goes throw if(score) The current score is set to zero and initializer "score" is set false. So when iDraw
+        is called frequently, the Current score doesn't initialized all the time. It is initialized only the 1st time.  */
 
-        if(score){
-            CurrentScore=0;
-            score=false;
-        }
-        int counter=0;
-
-        int y=yaxis-100;
-
-        //Loop for showing brick
-
-        for(i=0;i<2;i++)
+        if (score)
         {
-            x=270;
-            for(j=0;j<5;j++)
-            {
-                if(brick[i][j].value)
-                {
-                    iSetColor(120,120,120);
-                    iFilledRectangle(x,y,length,height);
-                    brick[i][j].brick_x=x;
-                    brick[i][j].brick_y=y;
-                }
-                x=x+length;
-                iSetColor(black);
-                iLine(x,y+height,x,y);
-            }
-            x=270;
-            iSetColor(black);
-            iLine(x,y,xaxis,y);
-            y=y-height;
+            CurrentScore = 0;
+            score = false;
         }
+        int counter = 0;
 
-        y=yaxis-200;
+        int y = yaxis - 100;
 
-        for(i=0;i<2;i++)
+        // Loop for showing brick
+
+        for (i = 0; i < 2; i++)
         {
-            x=570;
-            for(j=5;j<10;j++)
+            x = 270;
+            for (j = 0; j < 5; j++)
             {
-                if(brick[i][j].value)
+                if (brick[i][j].value)
                 {
-                    iSetColor(130,10,100);
-                    iFilledRectangle(x,y,length,height);
-                    brick[i][j].brick_x=x;
-                    brick[i][j].brick_y=y;
+                    iSetColor(120, 120, 120);
+                    iFilledRectangle(x, y, length, height);
+                    brick[i][j].brick_x = x;
+                    brick[i][j].brick_y = y;
                 }
-                x=x+length;
+                x = x + length;
                 iSetColor(black);
-                iLine(x,y+height,x,y);
+                iLine(x, y + height, x, y);
             }
-            x=570;
+            x = 270;
             iSetColor(black);
-            iLine(x,y,xaxis,y);
-            y=y-height;
+            iLine(x, y, xaxis, y);
+            y = y - height;
         }
 
+        y = yaxis - 200;
 
-        y=yaxis-400;
-
-        for(i=2;i<5;i++)
+        for (i = 0; i < 2; i++)
         {
-            x=300;
-            for(j=0;j<10;j++)
+            x = 570;
+            for (j = 5; j < 10; j++)
             {
-                if(brick[i][j].value)
+                if (brick[i][j].value)
                 {
-                    iSetColor(0,255,0);
-                    iFilledRectangle(x,y,length,height);
-                    brick[i][j].brick_x=x;
-                    brick[i][j].brick_y=y;
+                    iSetColor(130, 10, 100);
+                    iFilledRectangle(x, y, length, height);
+                    brick[i][j].brick_x = x;
+                    brick[i][j].brick_y = y;
                 }
-                x=x+length;
+                x = x + length;
                 iSetColor(black);
-                iLine(x,y+height,x,y);
+                iLine(x, y + height, x, y);
             }
-            x=300;
+            x = 570;
             iSetColor(black);
-            iLine(x,y,xaxis,y);
-            y=y-height;
+            iLine(x, y, xaxis, y);
+            y = y - height;
         }
 
-        if(ball_y-r > bar_y)
+        y = yaxis - 400;
+
+        for (i = 2; i < 5; i++)
+        {
+            x = 300;
+            for (j = 0; j < 10; j++)
+            {
+                if (brick[i][j].value)
+                {
+                    iSetColor(0, 255, 0);
+                    iFilledRectangle(x, y, length, height);
+                    brick[i][j].brick_x = x;
+                    brick[i][j].brick_y = y;
+                }
+                x = x + length;
+                iSetColor(black);
+                iLine(x, y + height, x, y);
+            }
+            x = 300;
+            iSetColor(black);
+            iLine(x, y, xaxis, y);
+            y = y - height;
+        }
+
+        if (ball_y - r > bar_y)
         {
             showball();
             showbar();
         }
 
-        if(ball_y < bar_y)
+        if (ball_y < bar_y)
         {
-            mask=1;
+            mask = 1;
             iPauseTimer(0);
             iSetColor(255, 255, 255);
-            iText(xaxis/2-100, yaxis/2, "Game Over.... Press END",GLUT_BITMAP_TIMES_ROMAN_24);
+            iText(xaxis / 2 - 100, yaxis / 2, "Game Over.... Press END", GLUT_BITMAP_TIMES_ROMAN_24);
         }
         else
         {
             iSetColor(255, 255, 255);
             iText(10, 10, "Press p for pause, r for resume, END for exit.");
             ShowScore();
-
         }
 
-        //for counting bricks
-        for(i=10;i<12;i++)
+        // for counting bricks
+        for (i = 10; i < 12; i++)
         {
-            for(j=0;j<20;j++)
+            for (j = 0; j < 20; j++)
             {
-                if(brick[i][j].value)
+                if (brick[i][j].value)
                     counter++;
             }
         }
 
-        //For initializing game;
-        control(counter,flag);
-
+        // For initializing game;
+        control(counter, flag);
     }
-    if(flag==10||flag==9)
+    if (flag == 10 || flag == 9)
     {
         iCredit();
-        texty+=.1;
+        texty += .1;
     }
 }
 
 /*
-	function iMouseMove() is called when the user presses and drags the mouse.
-	(mx, my) is the position where the mouse pointer is.
+    function iMouseMove() is called when the user presses and drags the mouse.
+    (mx, my) is the position where the mouse pointer is.
 */
 void iMouseMove(int mx, int my)
 {
-    if(mx>xaxis-(bar_l+bar_h/2))
-        bar_x=xaxis-(bar_l+bar_h/2);
-    else if(mx < bar_h/2)
-        bar_x=4;
-    else if(flag==5||mask==1);
-    //else if(ball_y-r<20);
-	else
-        bar_x=mx;
+    if (mx > xaxis - (bar_l + bar_h / 2))
+        bar_x = xaxis - (bar_l + bar_h / 2);
+    else if (mx < bar_h / 2)
+        bar_x = 4;
+    else if (flag == 5 || mask == 1)
+        ;
+    // else if(ball_y-r<20);
+    else
+        bar_x = mx;
 }
 
 /*
-	function iMouse() is called when the user presses/releases the mouse.
-	(mx, my) is the position where the mouse pointer is.
+    function iMouse() is called when the user presses/releases the mouse.
+    (mx, my) is the position where the mouse pointer is.
 */
 void iMouse(int button, int state, int mx, int my)
 {
-	if(flag==0)
-    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		if((mx>150&&mx<300)&&(my>550&&my<630))
-            flag=1;
-        else if((mx>40&&mx<550)&&(my>550&&my<630))
-            exit(0);
-        else if((mx>150&&mx<300)&&(my>420&&my<500))
-            flag=1;
-        else if((mx>400&&mx<550)&&(my>450&&my<500))
-            flag=2;
-        else if((mx>150&&mx<300)&&(my>290&&my<370))
-            flag=3;
-        else if((mx>400&&mx<550)&&(my>290&&my<370))
-            flag=4;
-        else if((mx>270&&mx<430)&&(my>190&&my<280))
-            flag=10;
-	}
-	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-	{
-		//place your codes here
-	}
+    if (flag == 0)
+        if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+        {
+            if ((mx > 150 && mx < 300) && (my > 550 && my < 630))
+                flag = 1;
+            else if ((mx > 40 && mx < 550) && (my > 550 && my < 630))
+                exit(0);
+            else if ((mx > 150 && mx < 300) && (my > 420 && my < 500))
+                flag = 1;
+            else if ((mx > 400 && mx < 550) && (my > 450 && my < 500))
+                flag = 2;
+            else if ((mx > 150 && mx < 300) && (my > 290 && my < 370))
+                flag = 3;
+            else if ((mx > 400 && mx < 550) && (my > 290 && my < 370))
+                flag = 4;
+            else if ((mx > 270 && mx < 430) && (my > 190 && my < 280))
+                flag = 10;
+        }
+    if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+    {
+        // place your codes here
+    }
 }
 
 /*
-	function iKeyboard() is < brick[i][j].brick_y+20 called whenever the user hits a key in keyboard.
-	key- holds the ASCII value of the key pressed.
+    function iKeyboard() is < brick[i][j].brick_y+20 called whenever the user hits a key in keyboard.
+    key- holds the ASCII value of the key pressed.
 */
 void iKeyboard(unsigned char key)
 {
-	if(key == 'p')
-	{
-		//do something with 'q'
-		iPauseTimer(0);
-	}
-	else if(key == 'b')
+    if (key == 'p')
     {
-        flag=0;
-        texty=0;
+        // do something with 'q'
+        iPauseTimer(0);
+    }
+    else if (key == 'b')
+    {
+        flag = 0;
+        texty = 0;
         iResumeTimer(0);
-        mask=0;
+        mask = 0;
         /*for(i=0;i<rw;i++)
             for(j=0;j<cl;i++)
         {
             brick[i][j].value=1;
         }*/
-        bar_x=xaxis/2-bar_l/2;
-        ball_x =bar_x+bar_l/2;
-        ball_y =bar_y+50;
+        bar_x = xaxis / 2 - bar_l / 2;
+        ball_x = bar_x + bar_l / 2;
+        ball_y = bar_y + 50;
     }
-    if(ball_y-r<bar_y)
-    {}
-	else
+    if (ball_y - r < bar_y)
     {
-        if(key == 'r')
+    }
+    else
+    {
+        if (key == 'r')
         {
             iResumeTimer(0);
         }
     }
-	//place your codes for other keys here
+    // place your codes for other keys here
 }
 
 /*
-	function iSpecialKeyboard() is called whenver user hits special keys like-
-	function keys, home, end, pg up, pg down, arraows etc. you have to use
-	appropriate constants to detect them. A list is:
-	GLUT_KEY_F1, GLUT_KEY_F2, GLUT_KEY_F3, GLUT_KEY_F4, GLUT_KEY_F5, GLUT_KEY_F6,
-	GLUT_KEY_F7, GLUT_KEY_F8, GLUT_KEY_F9, GLUT_KEY_F10, GLUT_KEY_F11, GLUT_KEY_F12,
-	GLUT_KEY_LEFT, GLUT_KEY_UP, GLUT_KEY_RIGHT, GLUT_KEY_DOWN, GLUT_KEY_PAGE UP,
-	GLUT_KEY_PAGE DOWN, GLUT_KEY_HOME, GLUT_KEY_END, GLUT_KEY_INSERT
+    function iSpecialKeyboard() is called whenver user hits special keys like-
+    function keys, home, end, pg up, pg down, arraows etc. you have to use
+    appropriate constants to detect them. A list is:
+    GLUT_KEY_F1, GLUT_KEY_F2, GLUT_KEY_F3, GLUT_KEY_F4, GLUT_KEY_F5, GLUT_KEY_F6,
+    GLUT_KEY_F7, GLUT_KEY_F8, GLUT_KEY_F9, GLUT_KEY_F10, GLUT_KEY_F11, GLUT_KEY_F12,
+    GLUT_KEY_LEFT, GLUT_KEY_UP, GLUT_KEY_RIGHT, GLUT_KEY_DOWN, GLUT_KEY_PAGE UP,
+    GLUT_KEY_PAGE DOWN, GLUT_KEY_HOME, GLUT_KEY_END, GLUT_KEY_INSERT
 */
 void iSpecialKeyboard(unsigned char key)
 {
 
-	if(key == GLUT_KEY_END)
-	{
-		exit(0);
-	}
-	else if(key == GLUT_KEY_LEFT)
+    if (key == GLUT_KEY_END)
     {
-        if(bar_x>0)
-            bar_x-=10;
+        exit(0);
     }
-    else if(key == GLUT_KEY_RIGHT)
+    else if (key == GLUT_KEY_LEFT)
     {
-        if(bar_x<xaxis-bar_l)
-        bar_x+=10;
+        if (bar_x > 0)
+            bar_x -= 10;
     }
-	//place your codes for other keys here
+    else if (key == GLUT_KEY_RIGHT)
+    {
+        if (bar_x < xaxis - bar_l)
+            bar_x += 10;
+    }
+    // place your codes for other keys here
 }
 
 void iMenu()
 {
-        int l=150,h=80;
-        iSetColor(255,255,255);
-        iRectangle(150,550,l,h);
-        iRectangle(400,550,l,h);
-        iRectangle(150,420,l,h);
-        iRectangle(400,420,l,h);
-        iRectangle(150,290,l,h);
-        iRectangle(400,290,l,h);
-        iRectangle(270,190,l,h);
+    int l = 150, h = 80;
+    iSetColor(255, 255, 255);
+    iRectangle(150, 550, l, h);
+    iRectangle(400, 550, l, h);
+    iRectangle(150, 420, l, h);
+    iRectangle(400, 420, l, h);
+    iRectangle(150, 290, l, h);
+    iRectangle(400, 290, l, h);
+    iRectangle(270, 190, l, h);
 
-        iSetColor(75,255,75);
-        iText(170,580, "New Game",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(440,580,"EXIT",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(170,450, "Level-1",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(440,450,"Level-2",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(170,320, "Level-3",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(440,320,"Level-4",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(300,220,"Credit",GLUT_BITMAP_TIMES_ROMAN_24);
+    iSetColor(75, 255, 75);
+    iText(170, 580, "New Game", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(440, 580, "EXIT", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(170, 450, "Level-1", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(440, 450, "Level-2", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(170, 320, "Level-3", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(440, 320, "Level-4", GLUT_BITMAP_TIMES_ROMAN_24);
+    iText(300, 220, "Credit", GLUT_BITMAP_TIMES_ROMAN_24);
 
-        score=true;
+    score = true;
 }
 
 void iCredit()
 {
-    if(flag==10)
+    if (flag == 10)
     {
-        texty=0;
-        flag=9;
+        texty = 0;
+        flag = 9;
     }
-    if(flag==9)
+    if (flag == 9)
     {
-        iSetColor(255,255,255);
-        iText(300,texty,"Home made Dx_ball GAME :p",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(300,texty-30,"Members:",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(300,texty-60,"ADITYA CHAKMA(120)",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(300,texty-90,"AHMED NAFIS FUAD(113)",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(300,texty-120,"Thanks for letting us play...",GLUT_BITMAP_TIMES_ROMAN_24);
-        iText(400,texty-150,"\\m/",GLUT_BITMAP_TIMES_ROMAN_24);
+        iSetColor(255, 255, 255);
+        iText(300, texty, "Home made Dx_ball GAME :p", GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(300, texty - 30, "Members:", GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(300, texty - 60, "ADITYA CHAKMA(120)", GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(300, texty - 90, "AHMED NAFIS FUAD(113)", GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(300, texty - 120, "Thanks for letting us play...", GLUT_BITMAP_TIMES_ROMAN_24);
+        iText(400, texty - 150, "\\m/", GLUT_BITMAP_TIMES_ROMAN_24);
     }
 }
 
-void ShowScore(){
-    int i,x,temp=CurrentScore;
-    for(i=0;i<5;i++)
+void ShowScore()
+{
+    int i, x, temp = CurrentScore;
+    for (i = 0; i < 5; i++)
     {
-        x=temp%10;
-        temp=temp/10;
-        str[4-i]=x+'0';
+        x = temp % 10;
+        temp = temp / 10;
+        str[4 - i] = x + '0';
     }
-    //S[5]='\0';
+    // S[5]='\0';
     iSetColor(Red);
-    iText(xaxis-200,10,"Score : ");
-    iText(xaxis-100, 10, str  );
+    iText(xaxis - 200, 10, "Score : ");
+    iText(xaxis - 100, 10, str);
 }
 
 /*void BuildScore(){
@@ -724,154 +720,161 @@ void ShowScore(){
 
 void control(int counter, int flag)
 {
-    if(counter==0)
+    if (counter == 0)
+    {
+        // iPauseTimer(0);
+        iSetColor(255, 255, 255);
+        iText(xaxis / 2 - 100, yaxis / 2, "Level-1 Complete");
+        flag++;
+        for (i = 0; i < Row; i++)
         {
-            //iPauseTimer(0);
-            iSetColor(255, 255, 255);
-            iText(xaxis/2-100, yaxis/2, "Level-1 Complete");
-            flag++;
-            for(i=0;i<Row;i++)
-            {
-                for(j=0;j<Col;j++)
-                    brick[i][j].value=1;
-            }
-            score=true;
+            for (j = 0; j < Col; j++)
+                brick[i][j].value = 1;
         }
+        score = true;
+    }
 }
 
 void showbar()
 {
-        iSetColor(gray);
-        iFilledRectangle(bar_x,bar_y,bar_l,bar_h);
-        iFilledCircle(bar_x,bar_y + (bar_h)/2 , bar_h/2);
-        iFilledCircle(bar_x + bar_l,bar_y + (bar_h)/2 , bar_h/2);
+    iSetColor(gray);
+    iFilledRectangle(bar_x, bar_y, bar_l, bar_h);
+    iFilledCircle(bar_x, bar_y + (bar_h) / 2, bar_h / 2);
+    iFilledCircle(bar_x + bar_l, bar_y + (bar_h) / 2, bar_h / 2);
 }
 
 // function for moving the ball
-void ballChange(){
+void ballChange()
+{
 
-    if(!mask)
-    if(flag)
-    {
-        ball_x += dx;
-        ball_y += dy;
+    if (!mask)
+        if (flag)
+        {
+            ball_x += dx;
+            ball_y += dy;
 
-        if(ball_x-r <0 || ball_x +r > xaxis) dx=-dx;
-        if(ball_y+r > yaxis) dy=-dy;
-        printf("ball_x =%d, ball_y=%d, bar_x= %d\n",ball_x,ball_y,bar_x);
-    }
+            if (ball_x - r < 0 || ball_x + r > xaxis)
+                dx = -dx;
+            if (ball_y + r > yaxis)
+                dy = -dy;
+            printf("ball_x =%d, ball_y=%d, bar_x= %d\n", ball_x, ball_y, bar_x);
+        }
 }
 
 void barchange()
 {
-    if(ball_x+r > bar_x && ball_x-r < bar_x+80 && ball_y <40){
-        if(ball_x > bar_x && ball_x <= bar_x+bar_l/3){
-            dx-=2;
-            //dy+=1;
-            dy=-dy;
+    if (ball_x + r > bar_x && ball_x - r < bar_x + 80 && ball_y < 40)
+    {
+        if (ball_x > bar_x && ball_x <= bar_x + bar_l / 3)
+        {
+            dx -= 2;
+            // dy+=1;
+            dy = -dy;
         }
-        else if(ball_x > bar_x + bar_l/3 && ball_x <= bar_x + (bar_l - bar_l/3)) dy=-dy;
-        else if(ball_x > bar_x + (bar_l - bar_l/3) && ball_x < bar_x + bar_l){
-            dx+=2;
-            //dy-=1;
-            dy=-dy;
+        else if (ball_x > bar_x + bar_l / 3 && ball_x <= bar_x + (bar_l - bar_l / 3))
+            dy = -dy;
+        else if (ball_x > bar_x + (bar_l - bar_l / 3) && ball_x < bar_x + bar_l)
+        {
+            dx += 2;
+            // dy-=1;
+            dy = -dy;
         }
-
     }
     /*if(ball_y< bar_y)
     {
         iPauseTimer(0);
     }*/
-
 }
 
 void showball()
 {
-        iSetColor(255, 0, 0);
-        iFilledCircle(ball_x, ball_y, r);
-        iSetColor(255,255, 0);
-        iFilledCircle(ball_x, ball_y, r-3);
-        iSetColor(255, 139, 87);
-        iFilledCircle(ball_x, ball_y, r-6);
-        iSetColor(255, 255, 255);
-        iLine(0,25,xaxis,25);
+    iSetColor(255, 0, 0);
+    iFilledCircle(ball_x, ball_y, r);
+    iSetColor(255, 255, 0);
+    iFilledCircle(ball_x, ball_y, r - 3);
+    iSetColor(255, 139, 87);
+    iFilledCircle(ball_x, ball_y, r - 6);
+    iSetColor(255, 255, 255);
+    iLine(0, 25, xaxis, 25);
 }
 
-
-
-void removebrick(){
-    for(i=0;i<rw;i++)
+void removebrick()
+{
+    for (i = 0; i < rw; i++)
+    {
+        for (j = 0; j < cl; j++)
         {
-            for(j=0;j<cl;j++)
+            int topx, topy, bottomx, bottomy, leftx, lefty, rightx, righty, a, b, v;
+            topx = ball_x;
+            topy = ball_y + r;
+            bottomx = ball_x;
+            bottomy = ball_y - r;
+            leftx = ball_x - r;
+            lefty = ball_y;
+            rightx = ball_x + r;
+            righty = ball_y;
+
+            a = brick[i][j].brick_x;
+            b = brick[i][j].brick_y;
+            v = brick[i][j].value;
+
+            if (v && topx >= a && topx <= (a + length) && topy >= b && topy <= (b + height))
             {
-                int topx,topy,bottomx,bottomy,leftx,lefty,rightx,righty,a,b,v;
-                topx=ball_x; topy=ball_y+r;
-                bottomx=ball_x; bottomy=ball_y-r;
-                leftx=ball_x-r; lefty=ball_y;
-                rightx=ball_x+r; righty=ball_y;
-
-                a=brick[i][j].brick_x;
-                b=brick[i][j].brick_y;
-                v=brick[i][j].value;
-
-                if(v && topx >= a && topx <= (a+length) && topy >= b && topy <= (b+height) )
-                {
-                    brick[i][j].value--;
-                    ball_y-=7;
-                    dy=-dy;
-                    CurrentScore+=rand()%5;
-                    break;
-                }
-                else if(v && bottomx >= a && bottomx <= (a+length) && bottomy >= b && bottomy <= (b+height) )
-                {
-                    brick[i][j].value--;
-                    ball_y-=7;
-                    dy=-dy;
-                    CurrentScore+=rand()%5;
-                    break;
-                }
-                else if(v && leftx >= a && leftx <= (a+length) && lefty >= b && leftx <= (b+height) )
-                {
-                    brick[i][j].value--;
-                    ball_x-=5;
-                    dx=-dx;
-                    CurrentScore+=rand()%5;
-                    break;
-                }
-                else if(v && rightx >= a && rightx <= (a+length) && righty >= b && righty <= (b+height) )
-                {
-                    brick[i][j].value--;
-                    ball_x-=5;
-                    dx=-dx;
-                    CurrentScore+=rand()%5;
-                    break;
-                }
-
+                brick[i][j].value--;
+                ball_y -= 7;
+                dy = -dy;
+                CurrentScore += rand() % 5;
+                break;
+            }
+            else if (v && bottomx >= a && bottomx <= (a + length) && bottomy >= b && bottomy <= (b + height))
+            {
+                brick[i][j].value--;
+                ball_y -= 7;
+                dy = -dy;
+                CurrentScore += rand() % 5;
+                break;
+            }
+            else if (v && leftx >= a && leftx <= (a + length) && lefty >= b && leftx <= (b + height))
+            {
+                brick[i][j].value--;
+                ball_x -= 5;
+                dx = -dx;
+                CurrentScore += rand() % 5;
+                break;
+            }
+            else if (v && rightx >= a && rightx <= (a + length) && righty >= b && righty <= (b + height))
+            {
+                brick[i][j].value--;
+                ball_x -= 5;
+                dx = -dx;
+                CurrentScore += rand() % 5;
+                break;
             }
         }
+    }
 }
 
-//main function
+// main function
 int main()
 {
-    bar_x=xaxis/2-bar_l/2;
-    //iPauseTimer(0);
-    ball_x =bar_x+bar_l/2;
-	ball_y =bar_y+50;
+    bar_x = xaxis / 2 - bar_l / 2;
+    // iPauseTimer(0);
+    ball_x = bar_x + bar_l / 2;
+    ball_y = bar_y + 50;
 
-	//place your own initialization codes here.
+    // place your own initialization codes here.
 
-    PlaySound("DX-Ball_2_Soundtrack-_Barnicle.wav",NULL,SND_ASYNC|SND_LOOP);
-	//rate of changing ball
-	iSetTimer(1, removebrick);
-	iSetTimer(10, ballChange);
-	iSetTimer(1, barchange);
-	//iSetTimer(10, ShowScore);
-	//dx = 5;
-	//dy = 7;
-	iInitialize(xaxis, yaxis, "Dx_Ball");   //Screen Size
+    PlaySound("DX-Ball_2_Soundtrack-_Barnicle.wav", NULL, SND_ASYNC | SND_LOOP);
+    // rate of changing ball
+    iSetTimer(1, removebrick);
+    iSetTimer(10, ballChange);
+    iSetTimer(1, barchange);
+    // iSetTimer(10, ShowScore);
+    // dx = 5;
+    // dy = 7;
+    iInitialize(xaxis, yaxis, "Dx_Ball"); // Screen Size
 
-	getch();
+    getch();
 
-	return 0;
+    return 0;
 }
