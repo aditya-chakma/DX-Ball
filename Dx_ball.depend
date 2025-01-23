@@ -1,0 +1,53 @@
+# depslib dependency file v1.0
+1463754176 source:d:\documents\documents and programes\programing\projects\dx_ball\d_x.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1462108168 d:\documents\documents and programes\programing\projects\dx_ball\igraphics.h
+	<stdio.h>
+	<stdlib.h>
+	<gl/glut.h>
+	<time.h>
+	<math.h>
+	<windows.h>
+	<gl/glaux.h>
+
+1465128016 source:d:\documents\documents and programes\programing\projects\dx_ball\dx_ball backup.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1465126842 source:d:\documents\documents and programes\programing\projects\dx_ball\dx_ball.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1465360024 source:d:\documents\documents and programes\programing\projects\dx_ball\level 2.cpp
+	"iGraphics.h"
+	<stdio.h>
+
+1465370079 source:d:\documents\documents and programes\programing\projects\dx_ball\final.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1465414723 source:d:\documents\documents and programes\programing\projects\dx_ball\untitled1.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1465452905 source:c:\users\asus\desktop\dx_ball\final.cpp
+	"iGraphics.h"
+	<stdio.h>
+	<conio.h>
+
+1462108168 c:\users\asus\desktop\dx_ball\igraphics.h
+	<stdio.h>
+	<stdlib.h>
+	<gl/glut.h>
+	<time.h>
+	<math.h>
+	<windows.h>
+	<gl/glaux.h>
+
